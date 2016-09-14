@@ -1,0 +1,53 @@
+{
+  "name": "ethereum-libp2p",
+  "version": "0.0.0",
+  "description": "ethereum node running on top of libp2p",
+  "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "scripts": {
+    "test": "PHANTOM=off gulp test",
+    "lint": "aegir-lint",
+    "test:node": "gulp test:node",
+    "test:browser": "PHANTOM=off gulp test:browser",
+    "build": "gulp build",
+    "release": "PHANTOM=off gulp release",
+    "release-minor": "PHANTOM=off gulp release --type minor",
+    "release-major": "PHANTOM=off gulp release --type major",
+    "coverage": "gulp coverage",
+    "coverage-publish": "aegir-coverage publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diasdavid/js-ethereum-libp2p.git"
+  },
+  "keywords": [
+    "libp2p",
+    "ethereum"
+  ],
+  "author": "David Dias <daviddias@ipfs.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/diasdavid/js-ethereum-libp2p/issues"
+  },
+  "homepage": "https://github.com/diasdavid/js-ethereum-libp2p#readme",
+  "devDependencies": {
+    "aegir": "^8.1.0",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "pre-commit": "^1.1.3"
+  },
+  "dependencies": {
+    "ethereumjs-tx": "^1.1.2",
+    "libp2p-ipfs": "^0.14.1",
+    "libp2p-ipfs-browser": "^0.15.1",
+    "lodash.random": "^3.2.0",
+    "peer-id": "^0.7.0",
+    "peer-info": "^0.7.1",
+    "pull-stream": "^3.4.5",
+    "run-parallel": "^1.1.6"
+  }
+}
