@@ -2,7 +2,8 @@
 
 const spawnNode = require('./libp2p-node')
 const parallel = require('run-parallel')
-const ethTx = require('ethereumjs-tx')
+const Transaction = require('ethereumjs-tx')
+const rlp = require('rlp')
 const EE = require('events').EventEmitter
 const util = require('util')
 const lp = require('pull-length-prefixed')
@@ -45,11 +46,32 @@ function EthereumNode () {
     ], callback)
   }
 
-  this.sendTx = (peerInfo, tx, callback) => {
+  this.setPrivateKey = (privateKey) => {
+    this.ethPrivKey = privateKey
+  }
+
+  this.sendTx = (peerInfo, tx) => {
+    tx.sign(this.ethPrivKey)
+
+    this.libp2p.dialByPeerInfo(peerInfo, '/ethereum/tx', gotConn)
+
+    function gotConn (err, conn) {
+      if (err) {
+        return callback(err)
+      }
+
+      pull(
+        pull.values([
+          tx.serialize()
+        ]),
+        lp.encode(),
+        conn
+      )
+    }
+  }
+
+  this.sentTxToRelay = (peerInfo, tx) => {
     // TODO
-    //   Dial on proto
-    //   serialize
-    //   send tx
   }
 }
 
@@ -57,13 +79,19 @@ function mountTxProtocol (ethereumNode, libp2pNode) {
   libp2pNode.handle('/ethereum/tx', (conn) => {
     pull(
       conn,
-      lp,
+      lp.decode(),
       pull.collect((err, txs) => {
         if (err) {
-          console.log(err)
-          return
+          return console.log(err)
         }
-        // TODO deserialize and emit each transaction
+
+        txs.forEach((tx) => {
+          const decoded = rlp.decode(tx)
+          tx = new Transaction(decoded)
+          if (tx.verifySignature()) {
+            ethereumNode.emit('tx', tx)
+          }
+        })
       })
     )
   })

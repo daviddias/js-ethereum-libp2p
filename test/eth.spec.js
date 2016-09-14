@@ -4,6 +4,7 @@
 const eth = require('../src')
 const expect = require('chai').expect
 const parallel = require('run-parallel')
+const Transaction = require('ethereumjs-tx')
 
 describe('ethereum-libp2p', () => {
   let eth1
@@ -23,7 +24,28 @@ describe('ethereum-libp2p', () => {
     eth1.libp2p.dialByPeerInfo(eth2.libp2p.peerInfo, done)
   })
 
-  it.skip('send a tx', (done) => {})
+  it('send a tx', (done) => {
+    const pk = new Buffer('e331b6d69882b4cb4ea581d88e0b604039a3de5967688d3dcffdd2270c0fd109', 'hex')
+
+    eth1.setPrivateKey(pk)
+
+    const tx = new Transaction()
+    tx.nonce = 0
+    tx.gasPrice = 100
+    tx.gasLimit = 1000
+    tx.value = 0
+    tx.data = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
+
+    eth2.on('tx', (tx) => {
+      expect(tx).to.exist
+      done()
+    })
+
+    eth1.sendTx(eth2.libp2p.peerInfo, tx, (err) => {
+      expect(err).to.not.exist
+    })
+  })
+
   it.skip('connect to tx-relay', (done) => {})
   it.skip('send tx to tx-relay', (done) => {})
 })
