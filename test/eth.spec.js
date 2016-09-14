@@ -5,10 +5,14 @@ const eth = require('../src')
 const expect = require('chai').expect
 const parallel = require('run-parallel')
 const Transaction = require('ethereumjs-tx')
+const Peer = require('peer-info')
+const Id = require('peer-id')
+const multiaddr = require('multiaddr')
 
 describe('ethereum-libp2p', () => {
   let eth1
   let eth2
+  let relayInfo
 
   it('spawn 2 nodes', (done) => {
     eth1 = new eth.Node()
@@ -36,7 +40,7 @@ describe('ethereum-libp2p', () => {
     tx.value = 0
     tx.data = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
 
-    eth2.on('tx', (tx) => {
+    eth2.once('tx', (tx) => {
       expect(tx).to.exist
       done()
     })
@@ -46,6 +50,27 @@ describe('ethereum-libp2p', () => {
     })
   })
 
-  it.skip('connect to tx-relay', (done) => {})
-  it.skip('send tx to tx-relay', (done) => {})
+  it('connect to tx-relay', (done) => {
+    const relayPeerIdJson = require('./data/relay-peer.json')
+    const id = Id.createFromJSON(relayPeerIdJson)
+    const mh = multiaddr('/ip4/127.0.0.1/tcp/33333/ws')
+    relayInfo = new Peer(id)
+    relayInfo.multiaddr.add(mh)
+
+    parallel([
+      (cb) => { eth1.libp2p.dialByPeerInfo(relayInfo, cb) },
+      (cb) => { eth2.libp2p.dialByPeerInfo(relayInfo, cb) }
+    ], done)
+  })
+
+  it('send tx to tx-relay', (done) => {
+    const tx = new Transaction()
+    tx.nonce = 0
+    tx.gasPrice = 100
+    tx.gasLimit = 1000
+    tx.value = 0
+    tx.data = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
+
+    eth1.sentTxToRelay(relayInfo, tx, done)
+  })
 })

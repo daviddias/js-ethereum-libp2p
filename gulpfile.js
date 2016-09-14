@@ -2,22 +2,21 @@
 
 const gulp = require('gulp')
 const multiaddr = require('multiaddr')
-const Node = require('libp2p-ipfs').Node
+const signalling = require('libp2p-webrtc-star/src/signalling-server')
 const Peer = require('peer-info')
 const Id = require('peer-id')
-const pull = require('pull-stream')
-const signalling = require('libp2p-webrtc-star/src/signalling-server')
 const parallel = require('run-parallel')
+const Relay = require('./src').Relay
 
 let sig
-let runningNode
+let relayNode
 
 gulp.task('libnode:start', (done) => {
   spawnNode((err, node) => {
     if (err) {
       throw err
     }
-    runningNode = node
+    relayNode = node
     sig = signalling.start(20000, done)
   })
 })
@@ -27,7 +26,7 @@ gulp.task('libnode:stop', (done) => {
   function waitAndClose () {
     parallel([
       (cb) => {
-        runningNode.stop(cb)
+        relayNode.stop(cb)
       },
       (cb) => {
         sig.stop(cb)
@@ -44,30 +43,22 @@ gulp.task('test:node:after', ['libnode:stop'])
 require('aegir/gulp')(gulp)
 
 function spawnNode (callback) {
-  const gulpPeer = require('./test/data/gulp-peer.json')
-  const id = Id.createFromJSON(gulpPeer)
-
-  const mh = multiaddr('/ip4/127.0.0.1/tcp/9200/ws')
+  const relayPeerIdJson = require('./test/data/relay-peer.json')
+  const id = Id.createFromJSON(relayPeerIdJson)
+  const mh = multiaddr('/ip4/127.0.0.1/tcp/33333/ws')
 
   const peer = new Peer(id)
   peer.multiaddr.add(mh)
 
-  const node = new Node(peer)
-  node.start(onStart)
-
-  function onStart (err) {
+  const node = new Relay()
+  node.start(peer, (err) => {
     if (err) {
-      callback(err)
+      return callback(err)
     }
-
-    // handle the protos
-    node.handle('/echo/1.0.0', (conn) => {
-      pull(
-        conn,
-        conn
-      )
-    })
-
     callback(null, node)
-  }
+  })
+
+  node.on('tx', (tx) => {
+    console.log('🌟 received transaction for relay 🎉')
+  })
 }
