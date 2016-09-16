@@ -6,7 +6,7 @@ const expect = require('chai').expect
 const Block = require('ethereumjs-block')
 const BlockHeader = require('ethereumjs-block/header.js')
 // const parallel = require('run-parallel')
-const thousand = require('./data/first-1000-blocks.json')
+const thousand = require('./data/real-chain/first-1000-blocks.json')
 const async = require('async')
 const utils = require('ethereumjs-util')
 const rlp = utils.rlp
@@ -24,7 +24,7 @@ describe('process 1st 1000 blocks', () => {
 
   it('add genesis block', (done) => {
     const decoded = rlp.decode(thousand[0])
-    console.log(decoded)
+    done()
     /*
     const genesisBlock = new Block()
 

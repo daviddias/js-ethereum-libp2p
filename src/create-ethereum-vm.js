@@ -46,11 +46,11 @@ function spinVM () {
   })
 
   // setUpPreConditions
-  vm.setup = (data, callback) => {
-    const keysOfPre = Object.keys(data.pre)
+  vm.setup = (preState, callback) => {
+    const keysOfPre = Object.keys(preState)
 
     async.eachSeries(keysOfPre, (key, cb1) => {
-      var acctData = data.pre[key]
+      var acctData = preState[key]
       var account = new Account()
 
       account.nonce = format(acctData.nonce)
@@ -78,9 +78,10 @@ function spinVM () {
         (cb2) => {
           account.stateRoot = storageTrie.root
 
-          if (data.exec && key === data.exec.address) {
-            data.root = storageTrie.root
-          }
+          // if (data.exec && key === data.exec.address) {
+          //  data.root = storageTrie.root
+          // }
+
           stateTrie.put(new Buffer(key, 'hex'),
               account.serialize(), cb2)
         }

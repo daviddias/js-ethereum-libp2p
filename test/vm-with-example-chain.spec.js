@@ -5,9 +5,13 @@ const ethereum = require('../src')
 const expect = require('chai').expect
 const Block = require('ethereumjs-block')
 const BlockHeader = require('ethereumjs-block/header.js')
-// const parallel = require('run-parallel')
-const testData = require('./data/vm-data.json')
+
 const async = require('async')
+
+// test data
+const blocks = require('./data/example-chain/blocks.json')
+const genesis = require('./data/example-chain/genesis-block.json')
+const states = require('./data/example-chain/states.json')
 
 describe('ethereum-vm', () => {
   let eth
@@ -17,19 +21,17 @@ describe('ethereum-vm', () => {
   })
 
   it('load pre data to setup vm', (done) => {
-    eth.vm.setup(testData, done)
+    eth.vm.setup(states.pre, done)
   })
 
   it('add genesis block', (done) => {
     const genesisBlock = new Block()
-    genesisBlock.header = new BlockHeader(
-                            testData.genesisBlockHeader
-                          )
+    genesisBlock.header = new BlockHeader(genesis.header)
     eth.vm._blockchain.putGenesis(genesisBlock, done)
   })
 
   it('add more blocks', (done) => {
-    async.eachSeries(testData.blocks, eachBlock, done)
+    async.eachSeries(blocks, eachBlock, done)
 
     function eachBlock (raw, cb) {
       let block
@@ -53,8 +55,7 @@ describe('ethereum-vm', () => {
       eth.vm.blockchain.getHead((err, block) => {
         expect(err).to.not.exist
         const currentHead = '0x' + eth.vm._blockchain.meta.rawHead.toString('hex')
-        const expected = testData.lastblockhash
-        expect(currentHead).to.equal(expected)
+        expect(currentHead).to.equal(states.lastBlockHash)
         done()
       })
     })
