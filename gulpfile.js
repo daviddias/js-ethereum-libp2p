@@ -59,6 +59,6 @@ function spawnNode (callback) {
   })
 
   node.on('tx', (tx) => {
-    console.log('🌟 received transaction for relay 🎉')
+    // console.log('🌟 received transaction to relay 🎉')
   })
 }

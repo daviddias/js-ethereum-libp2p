@@ -1,0 +1,36 @@
+{
+  "name": "webui",
+  "version": "0.0.0",
+  "description": "WebUI to showcase the possibilities of ethereum + libp2p",
+  "main": "src/index.js",
+  "scripts": {
+    "build-clean": "rm -r build",
+    "build-assets": "cp -r src/assets build",
+    "build-views": "pug src/views -o build --pretty",
+    "build-js": "aegir-build",
+    "build-css": "lessc --clean-css src/styles/page.less build/css/page.min.css",
+    "build": "npm run build-assets && npm run build-views && npm run build-js && npm run build-css",
+    "release": "npm run build && mv build release",
+    "serve": "static -p 9001 build",
+    "mon": "nodemon --exec 'npm run build && npm run serve' --watch src -e js,pug,less",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sig": "star-sig --port=20000"
+  },
+  "keywords": [
+    "libp2p",
+    "<3",
+    "ethereum"
+  ],
+  "author": "David Dias <daviddias@ipfs.io>",
+  "license": "MIT",
+  "devDependencies": {
+    "aegir": "diasdavid/aegir#f655e4ac670bbec6542f7ed561f925b07778cc6c",
+    "less": "^2.7.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "libp2p-webrtc-star": "^0.4.4",
+    "node-static": "^0.7.8",
+    "nodemon": "^1.10.2",
+    "pug": "^2.0.0-beta6",
+    "pug-cli": "^1.0.0-alpha6"
+  }
+}

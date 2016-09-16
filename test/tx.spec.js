@@ -9,7 +9,7 @@ const Peer = require('peer-info')
 const Id = require('peer-id')
 const multiaddr = require('multiaddr')
 
-describe('ethereum-libp2p', () => {
+describe('tx', () => {
   let eth1
   let eth2
   let relayInfo

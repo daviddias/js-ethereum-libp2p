@@ -8,6 +8,7 @@ const EE = require('events').EventEmitter
 const util = require('util')
 const lp = require('pull-length-prefixed')
 const pull = require('pull-stream')
+const createEthereumVM = require('./create-ethereum-vm')
 
 exports = module.exports
 exports.Node = EthereumNode
@@ -22,6 +23,8 @@ function EthereumNode () {
   EE.call(this)
 
   this.libp2p = null
+
+  this.vm = createEthereumVM()
 
   this.start = (callback) => {
     parallel([
@@ -72,6 +75,11 @@ function EthereumNode () {
     }
   }
 
+  // TODO
+  // this.sendTxToAll = (tx, callback) => {})
+
+  // TODO make relay accept tx in the same protocol
+  // no need to differentiate
   this.sentTxToRelay = (peerInfo, tx, callback) => {
     tx.sign(this.ethPrivKey)
 
