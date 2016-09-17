@@ -4,45 +4,38 @@
 const ethereum = require('../src')
 const expect = require('chai').expect
 const Block = require('ethereumjs-block')
-const BlockHeader = require('ethereumjs-block/header.js')
+// const BlockHeader = require('ethereumjs-block/header.js')
 // const parallel = require('run-parallel')
-const thousand = require('./data/real-chain/first-1000-blocks.json')
 const async = require('async')
-const utils = require('ethereumjs-util')
-const rlp = utils.rlp
+// const utils = require('ethereumjs-util')
+// const rlp = utils.rlp
 
-describe('process 1st 1000 blocks', () => {
+const thousand = require('./data/real-chain/first-1000-blocks.json')
+const states = require('./data/example-chain/states.json')
+
+describe.only('process 1st 1000 blocks', () => {
   let eth
 
   it('spawn a node', () => {
     eth = new ethereum.Node()
   })
 
-  it.skip('load pre data to setup vm', (done) => {
-    // eth.vm.setup(testData, done)
+  it('load pre data to setup vm', (done) => {
+    eth.vm.setup(states.pre, done)
   })
 
   it('add genesis block', (done) => {
-    const decoded = rlp.decode(thousand[0])
-    done()
-    /*
-    const genesisBlock = new Block()
-
-    genesisBlock.header = new BlockHeader(
-                            testData.genesisBlockHeader
-                          )
-    eth.vm._blockchain.putGenesis(genesisBlock, done)
-    */
+    const genesis = new Block(new Buffer(thousand[0].slice(2), 'hex'))
+    eth.vm._blockchain.putGenesis(genesis, done)
   })
 
-  /*
   it.skip('add more blocks', (done) => {
-    async.eachSeries(testData.blocks, eachBlock, done)
+    async.eachSeries(thousand.slice(1), eachBlock, done)
 
     function eachBlock (raw, cb) {
       let block
       try {
-        block = new Block(new Buffer(raw.rlp.slice(2), 'hex'))
+        block = new Block(new Buffer(raw.slice(2), 'hex'))
 
         // forces the block into thinking they are homestead
         block.header.isHomestead = () => { return true }
@@ -50,7 +43,12 @@ describe('process 1st 1000 blocks', () => {
           uncle.isHomestead = () => { return true }
         })
 
-        eth.vm._blockchain.putBlock(block, cb)
+        console.log('->', block.difficulty)
+
+        eth.vm._blockchain.putBlock(block, (err) => {
+          expect(err).to.not.exist
+          cb
+        })
       } catch (err) { cb(err) }
     }
   })
@@ -61,11 +59,11 @@ describe('process 1st 1000 blocks', () => {
       eth.vm.blockchain.getHead((err, block) => {
         expect(err).to.not.exist
         const currentHead = '0x' + eth.vm._blockchain.meta.rawHead.toString('hex')
-        const expected = testData.lastblockhash
-        expect(currentHead).to.equal(expected)
+        console.log(currentHead)
+        // const expected = testData.lastblockhash
+        // expect(currentHead).to.equal(expected)
         done()
       })
     })
   })
-  */
 })
