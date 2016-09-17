@@ -11,22 +11,21 @@ const utils = require('ethereumjs-util')
 const rlp = utils.rlp
 const BN = utils.BN
 
-module.exports = spinVM
+exports = module.exports
 
-function spinVM () {
+/*
+ * Creates an ethereum-vm attached to a StateTrie and
+ * a blockchain instance
+ */
+exports.create = () => {
   const db = isNode ? require('memdown') : require('level-js')
-  const blockchainDB = new LevelUp('blockchain', { db: db })
+  const blockchainDB = new LevelUp('bc', { db: db })
   const blockchain = new Blockchain(blockchainDB)
 
-  blockchain.ethash.cacheDB =
-    new LevelUp('blockchain-cache', { db: db })
+  blockchain.ethash.cacheDB = new LevelUp('bc-cache', { db: db })
 
   const stateTrie = new MPTrie()
-
-  const vm = new VM({
-    state: stateTrie,
-    blockchain: blockchain
-  })
+  const vm = new VM({ state: stateTrie, blockchain: blockchain })
 
   // NOTE: it would be super cool if the object get exposed
   // by default, however, it only exposes a version with a
@@ -34,15 +33,11 @@ function spinVM () {
   vm._blockchain = blockchain
 
   // caveat for pre-homestead tx
-  vm.on('beforeTx', function (tx) {
-    tx._homestead = true
-  })
+  vm.on('beforeTx', (tx) => { tx._homestead = true })
 
   // caveat for pre-homestead block
-  vm.on('beforeBlock', function (block) {
-    block.header.isHomestead = function () {
-      return true
-    }
+  vm.on('beforeBlock', (block) => {
+    block.header.isHomestead = () => { return true }
   })
 
   // setUpPreConditions
@@ -77,10 +72,6 @@ function spinVM () {
         },
         (cb2) => {
           account.stateRoot = storageTrie.root
-
-          // if (data.exec && key === data.exec.address) {
-          //  data.root = storageTrie.root
-          // }
 
           stateTrie.put(new Buffer(key, 'hex'),
               account.serialize(), cb2)

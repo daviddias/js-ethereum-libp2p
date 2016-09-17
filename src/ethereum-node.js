@@ -8,7 +8,7 @@ const EE = require('events').EventEmitter
 const util = require('util')
 const lp = require('pull-length-prefixed')
 const pull = require('pull-stream')
-const createEthereumVM = require('./create-ethereum-vm')
+const EthereumVM = require('./ethereum-vm')
 
 exports = module.exports
 exports.Node = EthereumNode
@@ -24,7 +24,7 @@ function EthereumNode () {
 
   this.libp2p = null
 
-  this.vm = createEthereumVM()
+  this.vm = EthereumVM.create()
 
   this.start = (callback) => {
     parallel([
@@ -35,6 +35,8 @@ function EthereumNode () {
           }
           this.libp2p = libp2pNode
           mountTxProtocol(this, this.libp2p)
+          mountBlockProtocol(this, this.libp2p)
+          onPeerSendKnownBlocks(this, this.libp2p)
           cb()
         })
       }
@@ -52,6 +54,20 @@ function EthereumNode () {
   this.setPrivateKey = (privateKey) => {
     this.ethPrivKey = privateKey
   }
+
+  // blocks
+
+  this.vm.on('block', (block) => {
+    // TODO
+    //  see the event the vm emits (maybe postBlock?)
+    //  send this block to all of the connected peers
+  })
+
+  // TODO
+  this.sendBlock = (peerInfo, block, callback) => {
+  }
+
+  // transactions
 
   this.sendTx = (peerInfo, tx, callback) => {
     tx.sign(this.ethPrivKey)
@@ -103,6 +119,24 @@ function EthereumNode () {
   }
 }
 
+/*
+ * Receive blocks from other peers
+ */
+function mountBlockProtocol (ethereumNode, libp2pNode) {
+  // Receive blocks
+}
+
+/*
+ * Each time I connect to a new peer, send the blocks I have
+ */
+function onPeerSendKnownBlocks (ethereumNode, libp2pNode) {
+  // Send blocks blocks
+  libp2pNode.swarm.on('peer-mux-established', (peerInfo) => {
+    // TODO
+    //   send all the blocks I know
+  })
+}
+
 function mountTxProtocol (ethereumNode, libp2pNode) {
   libp2pNode.handle('/ethereum/tx', (conn) => {
     pull(
@@ -110,7 +144,7 @@ function mountTxProtocol (ethereumNode, libp2pNode) {
       lp.decode(),
       pull.collect((err, txs) => {
         if (err) {
-          return console.log(err)
+          return console.log('receive tx err:', err)
         }
 
         txs.forEach((tx) => {
@@ -124,3 +158,4 @@ function mountTxProtocol (ethereumNode, libp2pNode) {
     )
   })
 }
+
