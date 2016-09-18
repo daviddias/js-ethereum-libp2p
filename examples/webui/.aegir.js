@@ -17,7 +17,6 @@ module.exports = {
       mkdirp: '{}',
       glob: '{}',
       'simple-websocket-server': '{}'
-    },
-    timeout: 0
+    }
   }
 }

@@ -1,5 +1,7 @@
-**/node_modules/
+**/node_modules
+**/build
 **/*.log
+examples/**/lib
 test/repo-tests*
 
 # Logs
@@ -33,3 +35,5 @@ node_modules
 
 lib
 dist
+gc-cache
+gc
