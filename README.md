@@ -1,6 +1,8 @@
 js-ethereum-libp2p
 ==================
 
+![](https://github.com/diasdavid/js-ethereum-libp2p/blob/master/img/banner.png?raw=true)
+
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
 [![](https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square)](http://ipfs.io/)
 [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
@@ -12,6 +14,10 @@ js-ethereum-libp2p
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 
 > Get the ethereum blockchain in the Browser or in a Node.js process using libp2p and run through it using ethereum-vm. This is the humble starts of getting a full ethereum node running in JavaScript that can interact with the rest of the network.
+
+# BEWARE BEWARE BEWARE
+
+This module is a work in progress! So beware of dragons! 🐲 🐉
 
 # Description
 
