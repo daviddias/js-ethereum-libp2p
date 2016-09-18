@@ -1,5 +1,4 @@
 const ethereum = require('../../../../src')
-const utils = require('../../../../test/utils')
 
 const node = new ethereum.Node()
 
