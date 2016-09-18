@@ -11,28 +11,16 @@ const async = require('async')
 // const rlp = utils.rlp
 
 const thousand = require('./data/real-chain/first-1000-blocks.json')
-const states = require('./data/example-chain/states.json')
 
-describe.only('process 1st 1000 blocks', function () {
+describe('process 1st 1000 blocks', function () {
   this.timeout(0)
   let eth
 
-  it('spawn a node', () => {
+  it('spawn a ethereum node', () => {
     eth = new ethereum.Node()
   })
 
-  it('load pre data to setup vm', (done) => {
-    eth.vm.setup(states.pre, done)
-  })
-
-  it('generat genesis block', (done) => {
-    // const genesis = new Block(new Buffer(thousand[0].slice(2), 'hex'))
-    done()
-    // eth.vm.stateManager.generateCanonicalGenesis(done)
-    // eth.vm._blockchain.putGenesis(genesis, done)
-  })
-
-  it('add more blocks', (done) => {
+  it('add 1000 blocks', (done) => {
     async.eachSeries(thousand.slice(1), eachBlock, done)
 
     function eachBlock (raw, cb) {
@@ -40,15 +28,6 @@ describe.only('process 1st 1000 blocks', function () {
       try {
         block = new Block(new Buffer(raw.slice(2), 'hex'))
 
-        // forces the block into thinking they are homestead
-        /*
-        block.header.isHomestead = () => { return true }
-
-        block.uncleHeaders.forEach((uncle) => {
-          uncle.isHomestead = () => { return true }
-        })
-        */
-        console.log(block.toJSON(true))
         eth.vm._blockchain.putBlock(block, (err) => {
           expect(err).to.not.exist
           cb()
@@ -63,9 +42,8 @@ describe.only('process 1st 1000 blocks', function () {
       eth.vm.blockchain.getHead((err, block) => {
         expect(err).to.not.exist
         const currentHead = '0x' + eth.vm._blockchain.meta.rawHead.toString('hex')
-        console.log(currentHead)
-        // const expected = testData.lastblockhash
-        // expect(currentHead).to.equal(expected)
+        const expected = '0xc31b362e591aa07faa977dbc492ae43cd47eef291920435153bbbf3acaf2fc2f'
+        expect(currentHead).to.equal(expected)
         done()
       })
     })
