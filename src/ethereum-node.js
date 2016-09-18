@@ -26,10 +26,14 @@ function EthereumNode () {
 
   this.vm = EthereumVM.create()
 
-  this.start = (callback) => {
+  this.start = (peerInfo, callback) => {
+    if (typeof peerInfo === 'function') {
+      callback = peerInfo
+      peerInfo = undefined
+    }
     parallel([
       (cb) => {
-        spawnNode((err, libp2pNode) => {
+        spawnNode(peerInfo, (err, libp2pNode) => {
           if (err) {
             return cb(err)
           }
