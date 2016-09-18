@@ -73,4 +73,11 @@ describe('tx', () => {
 
     eth1.sentTxToRelay(relayInfo, tx, done)
   })
+
+  it('stop the nodes', (done) => {
+    parallel([
+      eth1.stop,
+      eth2.stop
+    ], done)
+  })
 })

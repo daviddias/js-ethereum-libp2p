@@ -124,6 +124,21 @@ function EthereumNode () {
  */
 function mountBlockProtocol (ethereumNode, libp2pNode) {
   // Receive blocks
+  libp2pNode.handle('/ethereum/block', (conn) => {
+    pull(
+      conn,
+      lp.decode(),
+      pull.drain((blockRlpEncoded) => {
+        // TODO treat the blocks
+        console.log('got block')
+      }),
+      pull.onEnd((err) => {
+        if (err) {
+          return console.log('block proto err:', err)
+        }
+      })
+    )
+  })
 }
 
 /*

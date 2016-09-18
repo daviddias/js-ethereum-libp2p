@@ -5,6 +5,7 @@ const ethereum = require('../src')
 const expect = require('chai').expect
 const Block = require('ethereumjs-block')
 const BlockHeader = require('ethereumjs-block/header.js')
+const parallel = require('run-parallel')
 
 const async = require('async')
 
@@ -59,75 +60,67 @@ describe('ethereum-vm', () => {
     })
   })
 
-  // TODO pass all of these tests to the real chain test
-  // the example chain only has one block
-  describe.skip('check vm state when blocks are passed out of order', () => {
-    let eth
-
-    before((done) => {
-      eth = new ethereum.Node()
-      eth.vm.setup(states.pre, (err) => {
-        expect(err).to.not.exist
-        const genesisBlock = new Block()
-        genesisBlock.header = new BlockHeader(genesis.header)
-        eth.vm._blockchain.putGenesis(genesisBlock, done)
-      })
-    })
-
-    it('add first block', (done) => {
-      const first = blocks[0]
-      let block
-      try {
-        block = new Block(new Buffer(first.rlp.slice(2), 'hex'))
-      } catch (err) {
-        expect(err).to.not.exist
-      }
-      monkeyPatchBlock(block)
-      eth.vm._blockchain.putBlock(block, (err) => {
-        expect(err).to.not.exist
-        eth.vm.runBlockchain(done)
-      })
-    })
-
-    it('add second block', (done) => {
-      const second = blocks[1]
-      let block
-      try {
-        block = new Block(new Buffer(second.rlp.slice(2), 'hex'))
-      } catch (err) {
-        expect(err).to.not.exist
-      }
-      monkeyPatchBlock(block)
-      eth.vm._blockchain.putBlock(block, (err) => {
-        expect(err).to.not.exist
-        eth.vm.runBlockchain(done)
-      })
-    })
-
-    it('add fourth block (out of order)', (done) => {
-      const fourth = blocks[3]
-      let block
-      try {
-        block = new Block(new Buffer(fourth.rlp.slice(2), 'hex'))
-      } catch (err) {
-        expect(err).to.not.exist
-      }
-      monkeyPatchBlock(block)
-      eth.vm._blockchain.putBlock(block, (err) => {
-        expect(err).to.not.exist
-        eth.vm.runBlockchain((err) => {
-          expect(err).to.exist
-          done()
-        })
-      })
-    })
-  })
-
-  describe.skip('transfer blocks to a newly joined node', () => {
+  describe('transfer blocks to a newly joined node', () => {
     // TODO
     //   before: create 2 nodes, run the blockchain in one
     //   connect 1
     //   connect the second, see the blocks coming
+
+    let eth1
+    let eth2
+
+    before((done) => {
+      eth1 = new ethereum.Node()
+      eth2 = new ethereum.Node()
+
+      parallel([
+        eth1.start,
+        eth2.start
+      ], done)
+    })
+
+    after((done) => {
+      parallel([
+        eth1.stop,
+        eth2.stop
+      ], done)
+    })
+
+    it('set up genesis in both', (done) => {
+      const genesisBlock = new Block()
+      genesisBlock.header = new BlockHeader(genesis.header)
+
+      parallel([
+        (cb) => {
+          eth1.vm._blockchain.putGenesis(genesisBlock, cb)
+        },
+        (cb) => {
+          eth2.vm._blockchain.putGenesis(genesisBlock, cb)
+        }], done)
+    })
+
+    it('run the blockchain on the first node', (done) => {
+      async.eachSeries(blocks, eachBlock, run)
+
+      function eachBlock (raw, cb) {
+        let block
+        try {
+          block = new Block(new Buffer(raw.rlp.slice(2), 'hex'))
+        } catch (err) {
+          return cb(err)
+        }
+        monkeyPatchBlock(block)
+        eth1.vm._blockchain.putBlock(block, cb)
+      }
+
+      function run () {
+        eth1.vm.runBlockchain(done)
+      }
+    })
+
+    it('connect the second node, check that blocks come in', (done) => {
+      eth1.libp2p.dialByPeerInfo(eth2.libp2p.peerInfo, done)
+    })
   })
 
   describe.skip('transfer blocks to the rest of the network as they appear', () => {
@@ -135,8 +128,14 @@ describe('ethereum-vm', () => {
     //   before: create 2 nodes, connect them
     //   add first block
     //   add remaining blocks
-    before(() => {})
-    after(() => {})
+
+    // let eth1
+    // let eth2
+
+    before((done) => {
+    })
+
+    after((done) => {})
   })
 })
 
