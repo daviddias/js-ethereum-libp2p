@@ -35,3 +35,5 @@ node_modules
 
 lib
 dist
+gc-cache
+gc
