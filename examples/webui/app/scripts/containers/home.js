@@ -28,7 +28,7 @@ class Home extends Component {
 
   render () {
     return (
-      <Row>
+      <Row className='top-row'>
         <Col sm='1' md='1/3' lg='1/3' className='feed'>
           <Accounts feed={this.props.accounts} />
           <Peers feed={this.props.peers} />

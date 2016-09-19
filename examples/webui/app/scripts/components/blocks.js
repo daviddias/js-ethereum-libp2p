@@ -1,6 +1,13 @@
 import React, {Component, PropTypes} from 'react'
 import {Col, Glyph, Spinner} from 'elemental'
 import {AutoSizer, List} from 'react-virtualized'
+import {bufferToInt} from 'ethereumjs-util'
+
+function formatDate (buf) {
+  const ts = bufferToInt(buf)
+  const date = new Date(ts)
+  return date.toLocaleString()
+}
 
 export default class Blocks extends Component {
   static propTypes = {
@@ -14,7 +21,7 @@ export default class Blocks extends Component {
       <div key={key} style={style} className='block'>
         Number: {item.header.number}<br />
         Parent: {item.header.parentHash}<br />
-        Time: {item.header.timestamp}<br />
+        Time: {formatDate(item.header.timestamp)}<br />
       </div>
     )
   }
@@ -36,7 +43,7 @@ export default class Blocks extends Component {
             width={width}
             height={height}
             rowCount={this.props.feed.length}
-            rowHeight={20}
+            rowHeight={80}
             rowRenderer={this._renderBlock}
           />
         )}
@@ -46,7 +53,9 @@ export default class Blocks extends Component {
     return (
       <Col sm='1' md='1/3' lg='1/3' className='feed blocks'>
         <h2><Glyph icon='package' /> Blocks</h2>
-        {feed}
+        <div style={{ flex: '1 1 auto' }}>
+          {feed}
+        </div>
       </Col>
     )
   }

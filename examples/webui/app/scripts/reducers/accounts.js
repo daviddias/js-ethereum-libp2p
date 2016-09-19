@@ -5,6 +5,48 @@ const defaultState = {
   }, {
     hash: 'world',
     balance: 12532
+  }, {
+    hash: 'hello',
+    balance: 532
+  }, {
+    hash: 'world',
+    balance: 12532
+  }, {
+    hash: 'hello',
+    balance: 532
+  }, {
+    hash: 'world',
+    balance: 12532
+  }, {
+    hash: 'hello',
+    balance: 532
+  }, {
+    hash: 'world',
+    balance: 12532
+  }, {
+    hash: 'hello',
+    balance: 532
+  }, {
+    hash: 'world',
+    balance: 12532
+  }, {
+    hash: 'hello',
+    balance: 532
+  }, {
+    hash: 'world',
+    balance: 12532
+  }, {
+    hash: 'hello',
+    balance: 532
+  }, {
+    hash: 'world',
+    balance: 12532
+  }, {
+    hash: 'hello',
+    balance: 532
+  }, {
+    hash: 'world',
+    balance: 12532
   }]
 }
 

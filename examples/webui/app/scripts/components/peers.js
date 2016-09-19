@@ -43,7 +43,9 @@ export default class Peers extends Component {
     return (
       <Col sm='1' md='1' lg='1' className='peers feed'>
         <h2>Peers</h2>
-        {feed}
+        <div style={{ flex: '1 1 auto' }}>
+          {feed}
+        </div>
       </Col>
     )
   }

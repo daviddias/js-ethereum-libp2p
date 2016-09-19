@@ -43,7 +43,9 @@ export default class Transactions extends Component {
     return (
       <Col sm='1' md='1/3' lg='1/3' className='feed transactions'>
         <h2><Glyph icon='list-unordered' /> Transactions</h2>
-        {feed}
+        <div style={{ flex: '1 1 auto' }}>
+          {feed}
+        </div>
       </Col>
     )
   }

@@ -43,7 +43,9 @@ export default class Accounts extends Component {
     return (
       <Col sm='1' md='1' lg='1' className='feed accounts'>
         <h2><Glyph icon='list-unordered' /> Accounts</h2>
-        {feed}
+        <div style={{ flex: '1 1 auto' }}>
+          {feed}
+        </div>
       </Col>
     )
   }
