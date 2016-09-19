@@ -1,0 +1,14 @@
+{
+  "presets": ["es2015", "stage-0", "react"],
+  "plugins": [
+    "transform-runtime"
+  ],
+  "env": {
+    "development": {
+      "presets": ["react-hmre"],
+      "plugins": [
+        "transform-react-display-name"
+      ]
+    }
+  }
+}
