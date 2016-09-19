@@ -12,13 +12,10 @@
     "md5": "^2.2.1",
     "multiaddr": "^2.0.3",
     "multihashes": "^0.2.2",
-    "pnglib": "0.0.1",
     "prettysize": "0.0.3",
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",
     "react-addons-shallow-compare": "^15.3.1",
-    "react-contextmenu": "^1.6.3",
-    "react-copy-to-clipboard": "^4.2.3",
     "react-dom": "^15.3.1",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
@@ -26,7 +23,6 @@
     "react-tap-event-plugin": "^1.0.0",
     "react-virtualized": "^8.0.2",
     "redux": "^3.6.0",
-    "redux-saga": "^0.11.1",
     "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
@@ -69,7 +65,7 @@
     "style-loader": "^0.13.1",
     "transform-loader": "^0.2.3",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.2"
+    "webpack": "^2.1.0-beta.22"
   },
   "scripts": {
     "start": "hjs-dev-server",
@@ -82,18 +78,14 @@
   "author": "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipfs/paperhub"
+    "url": "https://github.com/diasdavid/js-ethereum-libp2p"
   },
   "keywords": [
     "ipfs",
-    "paperhub",
-    "webkit"
+    "ethereum"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ipfs/paperhub/issues"
-  },
-  "homepage": "https://github.com/ipfs/paperhub",
+  "homepage": "https://github.com/diasdavid/js-ethereum-libp2p",
   "engines": {
     "node": ">=4.0.0"
   }

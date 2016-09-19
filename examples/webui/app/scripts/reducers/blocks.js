@@ -3,7 +3,7 @@ import {blocks as actions} from '../actions'
 const defaultState = {
   list: {
     '0x09': {
-      state: 'received',
+      status: 'received',
       block: {
         header: {
           parentHash: new Buffer('2ce94342df186bab4165c268c43ab982d360c9474f429fec5565adfc5d1f258b', 'hex'),

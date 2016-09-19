@@ -19,7 +19,6 @@ module.exports = function makeConfig (isDev) {
     clearBeforeBuild: '!(img|favicon.ico)'
   })
 
-  // Handle js-ipfs-api
   config.module.loaders.push({
     test: /\.js$/,
     include: /node_modules\/(hoek|qs|wreck|boom|ipfs|lodash-es|promisify-es|orbit|logplease|crdts)/,
@@ -34,13 +33,14 @@ module.exports = function makeConfig (isDev) {
   })
 
   config.externals = {
-    // Needed for js-ipfs-api
     net: '{}',
     fs: '{}',
     tls: '{}',
     console: '{}',
     mkdirp: '{}',
-    'require-dir': '{}'
+    'require-dir': '{}',
+    glob: '{}',
+    'simple-websocket-server': '{}'
   }
 
   config.node = config.node || {}
@@ -50,7 +50,6 @@ module.exports = function makeConfig (isDev) {
     alias: {
       http: 'stream-http',
       https: 'https-browserify',
-      sinon: 'sinon/pkg/sinon',
       'libp2p-ipfs': 'libp2p-ipfs-browser',
       'node-forge': path.resolve(
         path.dirname(require.resolve('libp2p-crypto')),
