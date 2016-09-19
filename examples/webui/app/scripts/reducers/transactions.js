@@ -1,9 +1,14 @@
 const defaultState = {
-  list: [{
-    hash: 'hello'
-  }, {
-    hash: 'world'
-  }]
+  list: {
+    'hello': {
+      tx: {},
+      status: 'processed'
+    },
+    'world': {
+      tx: {},
+      status: 'received'
+    }
+  }
 }
 
 export default function transactions (state = defaultState, action) {

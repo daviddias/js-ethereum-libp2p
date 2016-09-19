@@ -6,24 +6,23 @@ import Blocks from '../components/blocks'
 import Transactions from '../components/transactions'
 import Peers from '../components/peers'
 import Accounts from '../components/accounts'
-import {pages} from '../actions'
+import {home} from '../actions'
 
 class Home extends Component {
   static propTypes = {
-    load: PropTypes.func.isRequired,
-    leave: PropTypes.func.isRequired,
-    blocks: PropTypes.array.isRequired,
-    transactions: PropTypes.array.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    blocks: PropTypes.object.isRequired,
+    transactions: PropTypes.object.isRequired,
     peers: PropTypes.array.isRequired,
-    accounts: PropTypes.array.isRequired
+    accounts: PropTypes.object.isRequired
   };
 
   componentWillMount () {
-    this.props.load()
+    this.props.dispatch(home.start())
   }
 
   componentWillUnmount () {
-    this.props.leave()
+    this.props.dispatch(home.stop())
   }
 
   render () {
@@ -51,6 +50,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, {
-  ...pages.home
-})(Home)
+export default connect(mapStateToProps)(Home)

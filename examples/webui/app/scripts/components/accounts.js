@@ -2,16 +2,21 @@ import React, {Component, PropTypes} from 'react'
 import {Col, Glyph, Spinner} from 'elemental'
 import {AutoSizer, List} from 'react-virtualized'
 
+import ProcessingStatus from './processing-status'
+
 export default class Accounts extends Component {
   static propTypes = {
-    feed: PropTypes.array.isRequired
+    feed: PropTypes.object.isRequired
   };
 
-  _renderAccount = ({key, index, style}) => {
-    const item = this.props.feed[index]
+  _renderAccount = ({key, index}) => {
+    const hash = this._feedValues[index]
+    const item = this.props.feed[hash]
+
     return (
-      <div key={key} style={style} className='account'>
-        {item.hash}: {item.balance}
+      <div key={key} className='account'>
+        {hash}: {item.account.balance}Ether <br />
+        Status: <ProcessingStatus status={item.status} />
       </div>
     )
   }
@@ -25,14 +30,15 @@ export default class Accounts extends Component {
       </div>
     )
 
-    if (this.props.feed && this.props.feed.length > 0) {
+    this._feedValues = Object.keys(this.props.feed)
+    if (this._feedValues && this._feedValues.length > 0) {
       feed = (
         <AutoSizer>
         {({ height, width }) => (
           <List
             width={width}
             height={height}
-            rowCount={this.props.feed.length}
+            rowCount={this._feedValues.length}
             rowHeight={20}
             rowRenderer={this._renderAccount}
           />

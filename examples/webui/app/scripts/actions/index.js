@@ -6,13 +6,19 @@
 
 // Workaround
 
-import * as pages from './pages'
 import * as errors from './errors'
 import * as router from './router'
 
 import * as home from './home'
+import * as accounts from './accounts'
+import * as blocks from './blocks'
+import * as peers from './peers'
+import * as transactions from './transactions'
 
-export {pages}
 export {errors}
 export {router}
 export {home}
+export {accounts}
+export {blocks}
+export {peers}
+export {transactions}

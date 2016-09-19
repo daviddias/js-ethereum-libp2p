@@ -2,11 +2,16 @@ import {createStore, applyMiddleware, compose} from 'redux'
 import {hashHistory} from 'react-router'
 import {routerMiddleware} from 'react-router-redux'
 import createLogger from 'redux-logger'
+import thunkMiddleware from 'redux-thunk'
 
 import rootReducer from '../reducers'
 
 const finalCreateStore = compose(
-  applyMiddleware(routerMiddleware(hashHistory), createLogger()),
+  applyMiddleware(
+    thunkMiddleware,
+    routerMiddleware(hashHistory),
+    createLogger()
+  ),
   window.devToolsExtension ? window.devToolsExtension() : (f) => f
 )(createStore)
 

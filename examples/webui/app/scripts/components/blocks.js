@@ -3,6 +3,9 @@ import {Col, Glyph, Spinner} from 'elemental'
 import {AutoSizer, List} from 'react-virtualized'
 import {bufferToInt} from 'ethereumjs-util'
 
+import ProcessingStatus from './processing-status'
+import Hash from './hash'
+
 function formatDate (buf) {
   const ts = bufferToInt(buf)
   const date = new Date(ts)
@@ -11,17 +14,20 @@ function formatDate (buf) {
 
 export default class Blocks extends Component {
   static propTypes = {
-    feed: PropTypes.array.isRequired
+    feed: PropTypes.object.isRequired
   };
 
   _renderBlock = ({key, index, style}) => {
-    const item = this.props.feed[index]
+    const hash = this._feedValues[index]
+    const item = this.props.feed[hash]
+    const block = item.block
 
     return (
       <div key={key} style={style} className='block'>
-        Number: {item.header.number}<br />
-        Parent: {item.header.parentHash}<br />
-        Time: {formatDate(item.header.timestamp)}<br />
+        Number: {block.header.number}<br />
+        Parent: <Hash value={block.header.parentHash} /><br />
+        Time: {formatDate(block.header.timestamp)}<br />
+        Status: <ProcessingStatus status={item.status} />
       </div>
     )
   }
@@ -35,14 +41,15 @@ export default class Blocks extends Component {
       </div>
     )
 
-    if (this.props.feed && this.props.feed.length > 0) {
+    this._feedValues = Object.keys(this.props.feed)
+    if (this._feedValues && this._feedValues.length > 0) {
       feed = (
         <AutoSizer>
         {({ height, width }) => (
           <List
             width={width}
             height={height}
-            rowCount={this.props.feed.length}
+            rowCount={this._feedValues.length}
             rowHeight={80}
             rowRenderer={this._renderBlock}
           />
