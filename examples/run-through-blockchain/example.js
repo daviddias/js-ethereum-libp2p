@@ -26,7 +26,7 @@ node.start(info, (err) => {
   })
 
   console.log('▇ Adding blocks')
-  async.eachSeries(thousand.slice(1, 1000), eachBlock, next)
+  async.eachSeries(thousand.slice(1, 10), eachBlock, next)
 
   function eachBlock (raw, cb) {
     let block
@@ -45,7 +45,11 @@ node.start(info, (err) => {
     console.log('⛓l Running through the blockchain')
 
     node.vm.on('beforeBlock', (block) => {
+      /*
       console.log('before', block.toJSON(true))
+      console.log('0x' + block.serialize().toString('hex'))
+      process.exit(0)
+      */
     })
 
     /*

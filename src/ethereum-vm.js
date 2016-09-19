@@ -11,12 +11,14 @@ exports = module.exports
  * Creates an ethereum-vm attached to a StateTrie and
  * a blockchain instance
  */
-exports.create = () => {
-  const db = require('memdown')
-  const blockchainDB = new LevelUp('./bc', { db: db })
-  const blockchain = new Blockchain(blockchainDB)
-
-  blockchain.ethash.cacheDB = new LevelUp('./bc-cache', { db: db })
+exports.create = (blockchain) => {
+  if (!blockchain) {
+    const rnd = Math.floor(Math.random() * 1000).toString()
+    const db = require('memdown')
+    const blockchainDB = new LevelUp('./bc' + rnd, { db: db })
+    blockchain = new Blockchain(blockchainDB)
+    blockchain.ethash.cacheDB = new LevelUp('./bc-cache' + rnd, { db: db })
+  }
 
   const stateTrie = new MPTrie()
   const vm = new VM({

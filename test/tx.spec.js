@@ -45,7 +45,7 @@ describe('tx', () => {
       done()
     })
 
-    eth1.sendTx(eth2.libp2p.peerInfo, tx, (err) => {
+    eth1.tx.send(eth2.libp2p.peerInfo, tx, (err) => {
       expect(err).to.not.exist
     })
   })
@@ -71,7 +71,7 @@ describe('tx', () => {
     tx.value = 0
     tx.data = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
 
-    eth1.sentTxToRelay(relayInfo, tx, done)
+    eth1.tx.relay(relayInfo, tx, done)
   })
 
   it('stop the nodes', (done) => {

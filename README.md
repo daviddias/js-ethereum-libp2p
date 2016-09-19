@@ -29,6 +29,44 @@ This module is a work in progress! So beware of dragons! 🐲 🐉
 
 ## API
 
+### Ethereum Node Class: `Ethereum.Node`
+
+#### Create an Ethereum Node: `const eth = new Ethereum.Node()`
+
+#### Start the node: `eth.start([PeerInfo], callback)`
+
+#### Stop the node: `eth.stop(callback)`
+
+### libp2p: `eth.libp2p`
+
+See [ipfs/js-libp2p-ipfs](https://github.com/ipfs/js-libp2p-ipfs) for documentation.
+
+### BlockChain: `eth.blockchain`
+
+#### Synchronize (fetch) the latest state of the blockchain `eth.blockchain.sync([PeerInfo], callback)`
+
+> Synchronizes the BlockChain, fetching every block in the network.
+
+### Virtual Machine `eth.vm`
+
+Instance of [ethereumjs-vm](https://www.npmjs.com/package/ethereumjs-vm), see [ethereumjs/ethereumjs-vm](https://github.com/ethereumjs/ethereumjs-vm) for docs.
+
+### Blocks
+
+> WIP
+
+### Send a block
+
+### Broadcast a block
+
+### Transactions
+
+> WIP
+
+### Send a transaction
+
+### Broadcast a transaction
+
 ## License
 
 MIT © David Dias
