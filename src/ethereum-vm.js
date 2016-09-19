@@ -30,6 +30,7 @@ exports.create = (blockchain) => {
   // by default, however, it only exposes a version with a
   // getBlock fun
   vm._blockchain = blockchain
+  vm._trie = stateTrie
 
   return vm
 }

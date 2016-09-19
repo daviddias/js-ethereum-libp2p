@@ -3,7 +3,7 @@ const idJson = require('./../broadcast-blocks/id-1')
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
-
+const Account = require('ethereumjs-account')
 const Block = require('ethereumjs-block')
 const async = require('async')
 const thousand = require('./../../test/data/real-chain/first-1000-blocks.json')
@@ -44,19 +44,40 @@ node.start(info, (err) => {
 
     console.log('⛓l Running through the blockchain')
 
-    node.vm.on('beforeBlock', (block) => {
-      /*
-      console.log('before', block.toJSON(true))
-      console.log('0x' + block.serialize().toString('hex'))
-      process.exit(0)
-      */
+    let lastBlock
+
+    node.vm.on('beforeBlock', (block, callback) => {
+      lastBlock = block
+      // console.log('before', block.toJSON(true))
+      // console.log('0x' + block.serialize().toString('hex'))
+      //
+      node.vm.trie.get(block.header.coinbase, (err, account) => {
+        if (err) {
+          throw err
+        }
+        const a = new Account(account)
+        console.log('before', block.header.coinbase.toString('hex'), a.balance.toString('hex'))
+        callback()
+      })
     })
 
-    /*
-    node.vm.on('afterBlock', (block) => {
-      console.log('after', block)
+    node.vm.on('afterBlock', (block, callback) => {
+      node.vm.trie.get(lastBlock.header.coinbase, (err, account) => {
+        if (err) {
+          throw err
+        }
+        const a = new Account(account)
+        console.log('after', lastBlock.header.coinbase.toString('hex'), a.balance.toString('hex'))
+        callback()
+      })
+      // console.log('after', block)
     })
-    */
+
+    // won't do anything if there is not tx
+    node.vm.on('beforeTx', (tx, callback) => {
+      console.log('tx', tx.from, tx.to, tx.value)
+      setTimeout(callback, 1000)
+    })
 
     node.vm.runBlockchain((err) => {
       if (err) {

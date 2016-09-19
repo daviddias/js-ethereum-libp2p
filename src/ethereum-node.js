@@ -9,7 +9,6 @@ const lp = require('pull-length-prefixed')
 const pull = require('pull-stream')
 const EthereumVM = require('./ethereum-vm')
 const Block = require('ethereumjs-block')
-// const pushable = require('pull-pushable')
 
 exports = module.exports
 exports.Node = EthereumNode
