@@ -26,7 +26,9 @@ describe('block', () => {
     parallel([
       eth1.stop,
       eth2.stop
-    ], done)
+    ], () => {
+      setTimeout(done, 1000)
+    })
   })
 
   it('connect both nodes', (done) => {
@@ -55,7 +57,11 @@ describe('block', () => {
     }
   })
 
-  it.skip('block.sync', (done) => {})
+  it('block.sync', (done) => {
+    eth2.block.sync(done)
+  })
 
-  it.skip('run through blockchain in the second', (done) => {})
+  it('run through blockchain in the second', (done) => {
+    eth2.vm.runBlockchain(done)
+  })
 })

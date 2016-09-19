@@ -8,6 +8,8 @@ const util = require('util')
 const lp = require('pull-length-prefixed')
 const pull = require('pull-stream')
 const EthereumVM = require('./ethereum-vm')
+const Block = require('ethereumjs-block')
+// const pushable = require('pull-pushable')
 
 exports = module.exports
 exports.Node = EthereumNode
@@ -25,6 +27,14 @@ function EthereumNode (blockchain) {
 
   this.vm = EthereumVM.create(blockchain)
   this.blockchain = this.vm._blockchain
+
+  // blocks cache (hacky), since  getBlockHashes is not a thing yet
+  // https://github.com/ethereumjs/ethereumjs-blockchain#blockchaingetblockhashesparenthash-count-cb
+  const blocks = []
+
+  this.vm.on('beforeBlock', (block) => {
+    blocks.push(block.serialize())
+  })
 
   // === libp2p ===
 
@@ -53,8 +63,11 @@ function EthereumNode (blockchain) {
 
   function setupDiscovery (libp2pNode) {
     libp2pNode.discovery.on('peer', (peerInfo) => {
-      console.log('FOUND NEW PEER')
-      // TODO dial to that peer
+      libp2pNode.dialByPeerInfo(peerInfo, (err) => {
+        if (err) {
+          console.log('err on dialing to discovered peer', err)
+        }
+      })
     })
   }
 
@@ -72,26 +85,54 @@ function EthereumNode (blockchain) {
     callback(new Error('not implemented yet'))
   }
 
-  // TODO
   this.block.sync = (peerInfo, callback) => {
-    callback(new Error('not implemented yet'))
+    if (typeof peerInfo === 'function') {
+      callback = peerInfo
+      peerInfo = undefined
+    }
+
+    if (!peerInfo) {
+      // for now, just pick one
+      const peers = this.libp2p.peerBook.getAll()
+      peerInfo = Object.keys(peers)
+                       .map((idB58Str) => {
+                         return peers[idB58Str]
+                       })[0]
+    }
+
+    this.libp2p.dialByPeerInfo(peerInfo, '/eth/block/sync/1.0.0', (err, conn) => {
+      if (err) {
+        return callback(err)
+      }
+
+      pull(
+        conn,
+        lp.decode(),
+        pull.drain((blockRlpEncoded) => {
+          let block
+          try {
+            block = new Block(blockRlpEncoded)
+
+            this.blockchain.putBlock(block, (err) => {
+              if (err) {
+                console.log('failed putting block', err)
+              }
+            })
+          } catch (err) {
+            console.log('failed putting block', err)
+          }
+        }, callback)
+      )
+    })
   }
 
   function mountBlockSyncProtocol (ethereumNode, libp2pNode) {
     // Receive blocks
     libp2pNode.handle('/eth/block/sync/1.0.0', (conn) => {
       pull(
-        conn,
-        lp.decode(),
-        pull.drain((blockRlpEncoded) => {
-          // TODO treat the blocks
-          console.log('got block')
-        }),
-        pull.onEnd((err) => {
-          if (err) {
-            return console.log('block proto err:', err)
-          }
-        })
+        pull.values(blocks),
+        lp.encode(),
+        conn
       )
     })
   }

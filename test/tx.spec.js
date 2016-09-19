@@ -78,6 +78,8 @@ describe('tx', () => {
     parallel([
       eth1.stop,
       eth2.stop
-    ], done)
+    ], () => {
+      setTimeout(done, 1000)
+    })
   })
 })
