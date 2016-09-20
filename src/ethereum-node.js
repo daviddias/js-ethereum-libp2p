@@ -111,6 +111,7 @@ function EthereumNode (blockchain) {
         conn,
         lp.decode(),
         pull.drain((blockRlpEncoded) => {
+          console.log('got block')
           counter++
           let block
           try {
