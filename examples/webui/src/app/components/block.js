@@ -8,7 +8,8 @@ import ProcessingStatus from './processing-status'
 
 function formatDate (buf) {
   const ts = bufferToInt(buf)
-  const date = new Date(ts)
+  // * 1000 it's a unix timestamp
+  const date = new Date(ts * 1000)
   return moment(date).fromNow()
 }
 

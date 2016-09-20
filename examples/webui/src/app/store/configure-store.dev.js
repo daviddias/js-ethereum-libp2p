@@ -7,9 +7,11 @@ import thunkMiddleware from 'redux-thunk'
 import rootReducer from '../reducers'
 import {api} from '../services'
 
+const node = api.createNode()
+
 const finalCreateStore = compose(
   applyMiddleware(
-    thunkMiddleware.withExtraArgument(api.createNode()),
+    thunkMiddleware.withExtraArgument(node),
     routerMiddleware(hashHistory),
     createLogger()
   ),
