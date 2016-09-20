@@ -1,11 +1,10 @@
 'use strict'
 
 const eth = require('../src')
-const Transaction = require('ethereumjs-tx')
 const multiaddr = require('multiaddr')
 const lp = require('pull-length-prefixed')
 const pull = require('pull-stream')
-const rlp = require('rlp')
+const Block = require('ethereumjs-block')
 
 const node = new eth.Node()
 
@@ -25,24 +24,21 @@ node.start((err) => {
     console.log('sweet, I got a tx')
   })
 
-  const ma = multiaddr('/ip4/10.0.1.12/tcp/4002/ipfs/QmYCxFF6LMSQQQxZLYGRGsaLs8stShMaW7eRRwzvUHNSqy')
+  const ma = multiaddr('/ip4/127.0.0.1/tcp/4002/ipfs/QmYCxFF6LMSQQQxZLYGRGsaLs8stShMaW7eRRwzvUHNSqy')
 
-  node.libp2p.dialByMultiaddr(ma, '/eth/tx', (err, conn) => {
+  node.libp2p.dialByMultiaddr(ma, '/eth/allblocks', (err, conn) => {
     if (err) {
       throw err
     }
     pull(
       conn,
       lp.decode(),
-      pull.through((tx) => {
-        console.log(tx.length)
-        const decoded = rlp.decode(tx)
-        tx = new Transaction(decoded)
-        if (tx.verifySignature()) {
-          console.log('woot, got tx')
-        }
-      }),
-      pull.onEnd(() => {})
+      pull.drain((block) => {
+        block = new Block(block)
+        console.log(block.toJSON(true).header.number)
+      }, () => {
+        console.log('no more blocks')
+      })
     )
   })
 })
