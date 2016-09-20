@@ -33,15 +33,15 @@ export default class Transactions extends Component {
     if (this._feedValues && this._feedValues.length > 0) {
       feed = (
         <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            rowCount={this._feedValues.length}
-            rowHeight={50}
-            rowRenderer={this._renderTransaction}
-          />
-        )}
+          {({ height, width }) => (
+            <List
+              width={width}
+              height={height}
+              rowCount={this._feedValues.length}
+              rowHeight={50}
+              rowRenderer={this._renderTransaction}
+            />
+           )}
         </AutoSizer>
       )
     }

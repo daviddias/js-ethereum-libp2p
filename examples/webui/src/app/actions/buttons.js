@@ -64,8 +64,8 @@ export function sync () {
 export function star () {
   return (dispatch, getState, getNode) => {
     dispatch(start('star'))
-    return getNode.then((node) => {
 
+    return getNode.then((node) => {
       pullBlockchain(dispatch, node)
 
       return callSync(node, relayInfo())
@@ -118,7 +118,6 @@ function putBlock (node, block) {
 function relayInfo () {
   const relayId = PeerId.createFromJSON(relayPeerIdJson)
   const relayma = multiaddr('/ip4/127.0.0.1/tcp/33333/ws')
-
   const relayInfo = new PeerInfo(relayId)
   relayInfo.multiaddr.add(relayma)
 

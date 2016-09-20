@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {Row, Col} from 'elemental'
+import {Row} from 'elemental'
 
 import Blocks from '../components/blocks'
 import Peers from '../components/peers'

@@ -1,5 +1,4 @@
 import {peers as actions} from '../actions'
-import multiaddr from 'multiaddr'
 
 const defaultState = {
   list: []

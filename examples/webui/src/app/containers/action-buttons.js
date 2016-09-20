@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {Row, Col, Button, ButtonGroup, Glyph, Spinner} from 'elemental'
+import {Col, Button, ButtonGroup, Glyph, Spinner} from 'elemental'
 
 import {buttons} from '../actions'
 import Hash from '../components/hash'
@@ -41,21 +41,21 @@ class ActionButtons extends Component {
         </h2>
         <ButtonGroup>
           <Button type='hollow-primary' onClick={this._onClick('simulate')} >
-            {this.props.processing.simulate ?
-             <Spinner type='primary' /> :
-             'Simulation'
+            {this.props.processing.simulate
+             ? <Spinner type='primary' />
+             : 'Simulation'
             }
           </Button>
           <Button type='hollow-primary' onClick={this._onClick('sync')} >
-            {this.props.processing.sync ?
-             <Spinner type='primary' /> :
-             'Sync'
+            {this.props.processing.sync
+             ? <Spinner type='primary' />
+             : 'Sync'
             }
           </Button>
           <Button type='hollow-primary' onClick={this._onClick('star')} >
-            {this.props.processing.star ?
-             <Spinner type='primary' /> :
-             <Glyph icon='star' type='primary' />
+            {this.props.processing.star
+             ? <Spinner type='primary' />
+             : <Glyph icon='star' type='primary' />
             }
           </Button>
         </ButtonGroup>

@@ -30,15 +30,15 @@ export default class Peers extends Component {
     if (this.props.feed && this.props.feed.length > 0) {
       feed = (
         <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            rowCount={this.props.feed.length}
-            rowHeight={20}
-            rowRenderer={this._renderAddr}
-          />
-        )}
+          {({ height, width }) => (
+            <List
+              width={width}
+              height={height}
+              rowCount={this.props.feed.length}
+              rowHeight={20}
+              rowRenderer={this._renderAddr}
+            />
+           )}
         </AutoSizer>
       )
     }

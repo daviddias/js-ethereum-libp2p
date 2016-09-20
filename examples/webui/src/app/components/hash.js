@@ -1,9 +1,16 @@
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 
-export default function Hash ({value, length = 16}) {
-  return (
-    <code className='hash'>
-      {value.toString('hex').substring(0, 16)}...
-    </code>
-  )
+export default class Hash extends Component {
+  static propTypes = {
+    value: PropTypes.any.isRequired
+  };
+
+  render () {
+    const {value} = this.props
+    return (
+      <code className='hash'>
+        {value.toString('hex').substring(0, 16)}...
+      </code>
+    )
+  }
 }

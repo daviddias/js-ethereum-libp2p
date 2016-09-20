@@ -13,7 +13,7 @@ export default function processing (state = defaultState, action) {
     case actions.START:
       return {
         ...state,
-       [prop]: true
+        [prop]: true
       }
     case actions.STOP:
       return {

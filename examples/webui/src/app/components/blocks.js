@@ -35,15 +35,15 @@ export default class Blocks extends Component {
     if (this._feedValues && this._feedValues.length > 0) {
       feed = (
         <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            rowCount={this._feedValues.length}
-            rowHeight={70}
-            rowRenderer={this._renderBlock}
-          />
-        )}
+          {({ height, width }) => (
+            <List
+              width={width}
+              height={height}
+              rowCount={this._feedValues.length}
+              rowHeight={70}
+              rowRenderer={this._renderBlock}
+            />
+           )}
         </AutoSizer>
       )
     }

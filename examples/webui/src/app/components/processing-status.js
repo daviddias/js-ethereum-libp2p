@@ -1,17 +1,25 @@
-import React from 'react'
+import React, {PropTypes, Component} from 'react'
 import {Glyph} from 'elemental'
 
-export default function ProcessingStatus ({status}) {
-  let type = 'default'
-  if (status === 'received') {
-    type = 'warning'
-  }
+export default class ProcessingStatus extends Component {
+  static propTypes = {
+    status: PropTypes.string.isRequired
+  };
 
-  if (status === 'processed') {
-    type = 'success'
-  }
+  render () {
+    const {status} = this.props
 
-  return (
-    <Glyph icon='primitive-dot' type={type} />
-  )
+    let type = 'default'
+    if (status === 'received') {
+      type = 'warning'
+    }
+
+    if (status === 'processed') {
+      type = 'success'
+    }
+
+    return (
+      <Glyph icon='primitive-dot' type={type} />
+    )
+  }
 }

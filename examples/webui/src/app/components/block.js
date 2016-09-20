@@ -4,7 +4,6 @@ import {bufferToInt} from 'ethereumjs-util'
 import {Row, Col} from 'elemental'
 
 import Hash from './hash'
-import ProcessingStatus from './processing-status'
 
 function formatDate (buf) {
   const ts = bufferToInt(buf)
