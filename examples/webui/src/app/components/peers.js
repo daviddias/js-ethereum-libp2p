@@ -11,7 +11,7 @@ export default class Peers extends Component {
     const item = this.props.feed[index]
     return (
       <div key={key} style={style} className='peer'>
-        <Glyph icon='chevron-right' /> {item.toString()}
+        <Glyph icon='chevron-right' /> {item.decapsulate('ipfs').toString()}
       </div>
     )
   }
@@ -42,8 +42,8 @@ export default class Peers extends Component {
     }
     return (
       <Col sm='1' md='1' lg='1' className='peers feed'>
-        <h2>Peers</h2>
-        <div style={{ flex: '1 1 auto' }}>
+        <h2><Glyph icon='globe' /> Peers</h2>
+        <div className='feed-wrapper'>
           {feed}
         </div>
       </Col>

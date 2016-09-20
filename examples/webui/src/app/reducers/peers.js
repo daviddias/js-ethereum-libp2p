@@ -2,7 +2,8 @@ const multiaddr = require('multiaddr')
 
 const defaultState = {
   list: [
-    multiaddr('/ip4/46.5.20.17/tcp/4001/ipfs/QmVqkWPYn5WSgETUdviL63uR62sRT7ZKQHAohanttCgQ5C')
+    multiaddr('/ip4/46.5.20.17/tcp/4001/ipfs/QmVqkWPYn5WSgETUdviL63uR62sRT7ZKQHAohanttCgQ5C'),
+    multiaddr('/ip4/127.5.20.17/tcp/4001/ipfs/QmVqkWPYn5WSgETUdviL63uR62sRT7ZKQHAohanttCgQ5C')
   ]
 }
 

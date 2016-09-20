@@ -36,7 +36,7 @@ export default class Blocks extends Component {
             width={width}
             height={height}
             rowCount={this._feedValues.length}
-            rowHeight={80}
+            rowHeight={70}
             rowRenderer={this._renderBlock}
           />
         )}
@@ -46,7 +46,7 @@ export default class Blocks extends Component {
     return (
       <Col sm='1' md='1/3' lg='1/3' className='feed blocks'>
         <h2><Glyph icon='package' /> Blocks</h2>
-        <div style={{ flex: '1 1 auto' }}>
+        <div className='feed-wrapper'>
           {feed}
         </div>
       </Col>

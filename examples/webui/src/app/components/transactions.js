@@ -14,7 +14,7 @@ export default class Transactions extends Component {
     const item = this.props.feed[hash]
     return (
       <div key={key} style={style} className='transaction'>
-        {hash}
+        {hash} <br />
         Status: <ProcessingStatus status={item.status} />
       </div>
     )
@@ -38,7 +38,7 @@ export default class Transactions extends Component {
             width={width}
             height={height}
             rowCount={this._feedValues.length}
-            rowHeight={20}
+            rowHeight={50}
             rowRenderer={this._renderTransaction}
           />
         )}
@@ -48,7 +48,7 @@ export default class Transactions extends Component {
     return (
       <Col sm='1' md='1/3' lg='1/3' className='feed transactions'>
         <h2><Glyph icon='list-unordered' /> Transactions</h2>
-        <div style={{ flex: '1 1 auto' }}>
+        <div className='feed-wrapper'>
           {feed}
         </div>
       </Col>

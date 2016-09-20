@@ -24,11 +24,11 @@ export default class Block extends Component {
       <Row className='block'>
         <Col sm='1/3' className={`block-number ${status}`}>
           Block {block.header.number}<br />
-          {formatDate(block.header.timestamp)}
         </Col>
 
         <Col sm='2/3' className='block-details'>
           <em>Parent</em> <Hash value={block.header.parentHash} /><br />
+          <em>Created</em> {formatDate(block.header.timestamp)}
         </Col>
       </Row>
     )

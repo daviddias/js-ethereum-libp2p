@@ -39,7 +39,7 @@ export default class Accounts extends Component {
             width={width}
             height={height}
             rowCount={this._feedValues.length}
-            rowHeight={20}
+            rowHeight={50}
             rowRenderer={this._renderAccount}
           />
         )}
@@ -48,8 +48,8 @@ export default class Accounts extends Component {
     }
     return (
       <Col sm='1' md='1' lg='1' className='feed accounts'>
-        <h2><Glyph icon='list-unordered' /> Accounts</h2>
-        <div style={{ flex: '1 1 auto' }}>
+        <h2><Glyph icon='credit-card' /> Accounts</h2>
+        <div className='feed-wrapper'>
           {feed}
         </div>
       </Col>
