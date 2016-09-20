@@ -7,6 +7,7 @@ import transactions from './transactions'
 import peers from './peers'
 import accounts from './accounts'
 import head from './head'
+import processing from './processing'
 
 const rootReducer = combineReducers({
   blocks,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   accounts,
   errors,
   head,
+  processing,
   routing: routerReducer
 })
 

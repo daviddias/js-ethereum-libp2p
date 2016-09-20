@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import {Col, Glyph, Spinner} from 'elemental'
 import {AutoSizer, List} from 'react-virtualized'
 
+import Hash from './hash'
+
 export default class Peers extends Component {
   static propTypes = {
     feed: PropTypes.array.isRequired
@@ -11,7 +13,7 @@ export default class Peers extends Component {
     const item = this.props.feed[index]
     return (
       <div key={key} style={style} className='peer'>
-        <Glyph icon='chevron-right' /> {item.decapsulate('ipfs').toString()}
+        <Glyph icon='chevron-right' /> <Hash value={item.id.toB58String()} />
       </div>
     )
   }
@@ -21,7 +23,7 @@ export default class Peers extends Component {
       <div className='loader'>
         <Spinner size='md' type='primary' />
         <br />
-        Loading your peers
+        Waiting for peers
       </div>
     )
 

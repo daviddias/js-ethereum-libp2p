@@ -4,6 +4,22 @@ import blocks from '../../../../../test/data/real-chain/first-1000-blocks.json'
 const limitedBlocks = blocks.slice(1, 6)
 
 export const SET_CURRENT_HEAD = 'SET_CURRENT_HEAD'
+export const START = 'START_PROCESSING'
+export const STOP = 'STOP_PROCESSING'
+
+export function start (prop) {
+  return {
+    type: START,
+    prop: prop
+  }
+}
+
+export function stop (prop) {
+  return {
+    type: STOP,
+    prop: prop
+  }
+}
 
 export function setCurrentHead (head) {
   return {
@@ -14,8 +30,9 @@ export function setCurrentHead (head) {
 
 export function simulate () {
   return (dispatch, getState, getNode) => {
+    dispatch(start('simulate'))
     return getNode.then((node) => {
-      Promise.all(limitedBlocks.map((raw) => new Promise((resolve, reject) => {
+      return Promise.all(limitedBlocks.map((raw) => new Promise((resolve, reject) => {
         const block = new Block(new Buffer(raw.slice(2), 'hex'))
         node.vm._blockchain.putBlock(block, (err) => {
           if (err) {
@@ -38,24 +55,39 @@ export function simulate () {
 
           resolve(block)
         })
-      })).then((block) => {
-        const head = '0x' + node.vm._blockchain.meta.rawHead.toString('hex')
-        dispatch(setCurrentHead(head))
-      })
+      }))
+      .then(() => updateHead(dispatch, node))
+      .then(() => dispatch(stop('simulate')))
     })
   }
 }
 
 export function sync () {
-  return (dispatch) => {
-    console.log('SYNCING')
-    return Promise.resolve()
+  return (dispatch, getState, getNode) => {
+    dispatch(start('sync'))
+    return getNode.then((node) => {
+      return new Promise((resolve, reject) => {
+        node.block.sync((err) => {
+          if (err) return reject(err)
+          resolve()
+        })
+      })
+      .then(() => updateHead(dispatch, node))
+      .then(() => dispatch(stop('sync')))
+    })
   }
 }
 
 export function star () {
   return (dispatch) => {
+    dispatch(start('star'))
     console.log('STARING')
+    dispatch(stop('star'))
     return Promise.resolve()
   }
+}
+
+function updateHead (dispatch, node) {
+  const head = '0x' + node.vm._blockchain.meta.rawHead.toString('hex')
+  dispatch(setCurrentHead(head))
 }

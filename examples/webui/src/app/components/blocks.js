@@ -23,7 +23,7 @@ export default class Blocks extends Component {
       <div className='loader'>
         <Spinner size='md' type='primary' />
         <br />
-        Loading your blocks
+        Loading blocks
       </div>
     )
 

@@ -28,7 +28,7 @@ export default class Accounts extends Component {
       <div className='loader'>
         <Spinner size='md' type='primary' />
         <br />
-        Loading your accounts
+        Loading accounts
       </div>
     )
 
