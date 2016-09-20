@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {Row, Col, Button, ButtonGroup} from 'elemental'
-import classNames from 'classnames'
+import {Row, Col, Button, ButtonGroup, Glyph} from 'elemental'
 
 import {buttons} from '../actions'
 
@@ -15,6 +14,9 @@ class Home extends Component {
   render () {
     return (
       <Col sm='1' className='action-buttons'>
+        <h2 className='title'>
+          libp2p <Glyph icon='heart' type='danger' /> ethereum
+        </h2>
         <ButtonGroup>
           <Button type='hollow-primary' onClick={this.props.simulate} >
             Simulation
@@ -23,7 +25,7 @@ class Home extends Component {
             Sync
           </Button>
           <Button type='hollow-primary' onClick={this.props.star} >
-            Star
+            <Glyph icon='star' type='primary' />
           </Button>
         </ButtonGroup>
       </Col>

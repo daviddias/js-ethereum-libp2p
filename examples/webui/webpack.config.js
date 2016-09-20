@@ -95,6 +95,18 @@ module.exports = {
     }, {
       test: /\.css$/,
       loader: 'style!css'
+    }, {
+      test: /\.woff2?(\?\S*)?$/,
+      loader: 'url-loader?mimetype=application/font-woff'
+    }, {
+      test: /\.ttf(\?\S*)?$/,
+      loader: 'url-loader?mimetype=application/octet-stream'
+    }, {
+      test: /\.otf(\?\S*)?$/,
+      loader: 'url-loader'
+    }, {
+      test: /\.eot(\?\S*)?$/,
+      loader: 'url-loader'
     }]
   },
   externals: {
