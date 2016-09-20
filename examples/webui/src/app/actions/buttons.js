@@ -1,5 +1,9 @@
 import Block from 'ethereumjs-block'
 import blocks from '../../../../../test/data/real-chain/first-1000-blocks.json'
+import PeerId from 'peer-id'
+import PeerInfo from 'peer-info'
+import multiaddr from 'multiaddr'
+import relayPeerIdJson from '../../../../../test/data/relay-peer.json'
 
 const limitedBlocks = blocks.slice(1, 6)
 
@@ -58,11 +62,15 @@ export function sync () {
 }
 
 export function star () {
-  return (dispatch) => {
+  return (dispatch, getState, getNode) => {
     dispatch(start('star'))
-    console.log('STARING')
-    dispatch(stop('star'))
-    return Promise.resolve()
+    return getNode.then((node) => {
+
+      pullBlockchain(dispatch, node)
+
+      return callSync(node, relayInfo())
+        .then(() => dispatch(stop('star')))
+    })
   }
 }
 
@@ -89,9 +97,9 @@ function getHead (node) {
   })
 }
 
-function callSync (node) {
+function callSync (node, info) {
   return new Promise((resolve, reject) => {
-    node.block.sync((err) => {
+    node.block.sync(info, (err) => {
       if (err) return reject(err)
       resolve()
     })
@@ -105,4 +113,29 @@ function putBlock (node, block) {
       resolve()
     })
   })
+}
+
+function relayInfo () {
+  const relayId = PeerId.createFromJSON(relayPeerIdJson)
+  const relayma = multiaddr('/ip4/127.0.0.1/tcp/33333/ws')
+
+  const relayInfo = new PeerInfo(relayId)
+  relayInfo.multiaddr.add(relayma)
+
+  return relayInfo
+}
+
+function pullBlockchain (dispatch, node) {
+  let running
+  setTimeout(() => {
+    setInterval(() => {
+      if (running) return
+      running = true
+
+      runBlockchain(node).then(() => {
+        running = false
+        updateHead(dispatch, node)
+      })
+    }, 2000)
+  }, 2000)
 }

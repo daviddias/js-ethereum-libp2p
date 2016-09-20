@@ -31,6 +31,7 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
     "brfs": "^1.4.3",
+    "browserify-zlib": "github:ipfs/browserify-zlib#master",
     "css-loader": "^0.25.0",
     "eslint": "^3.5.0",
     "eslint-config-standard": "^6.0.1",
