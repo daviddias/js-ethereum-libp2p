@@ -104,10 +104,14 @@ function EthereumNode (blockchain) {
         return callback(err)
       }
 
+      let canFinish = false
+      let counter = 0
+
       pull(
         conn,
         lp.decode(),
         pull.drain((blockRlpEncoded) => {
+          counter++
           let block
           try {
             block = new Block(blockRlpEncoded)
@@ -116,11 +120,16 @@ function EthereumNode (blockchain) {
               if (err) {
                 console.log('failed putting block', err)
               }
+              if (--counter === 0 && canFinish) {
+                callback()
+              }
             })
           } catch (err) {
             console.log('failed putting block', err)
           }
-        }, callback)
+        }, () => {
+          canFinish = true
+        })
       )
     })
   }

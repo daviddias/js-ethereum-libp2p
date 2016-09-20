@@ -26,14 +26,14 @@ node.start(info, (err) => {
   })
 
   console.log('▇ Adding blocks')
-  async.eachSeries(thousand.slice(1, 20), eachBlock, next)
+  async.eachSeries(thousand.slice(1, 3), eachBlock, next)
 
   function eachBlock (raw, cb) {
     let block
     try {
       block = new Block(new Buffer(raw.slice(2), 'hex'))
 
-      node.vm._blockchain.putBlock(block, cb)
+      node.blockchain.putBlock(block, cb)
     } catch (err) { cb(err) }
   }
 
@@ -47,14 +47,9 @@ node.start(info, (err) => {
       if (err) {
         throw err
       }
-      node.vm.blockchain.getHead((err, block) => {
-        if (err) {
-          throw err
-        }
 
-        const currentHead = '0x' + node.vm._blockchain.meta.rawHead.toString('hex')
-        console.log('➔ Head', currentHead)
-      })
+      const currentHead = '0x' + node.blockchain.meta.rawHead.toString('hex')
+      console.log('➔ Head', currentHead)
     })
   }
 })
