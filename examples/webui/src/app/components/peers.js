@@ -41,7 +41,7 @@ export default class Peers extends Component {
       )
     }
     return (
-      <Col sm='1' md='1' lg='1' className='peers feed'>
+      <Col sm='1' md='1/3' lg='1/3' className='peers feed'>
         <h2><Glyph icon='globe' /> Peers</h2>
         <div className='feed-wrapper'>
           {feed}

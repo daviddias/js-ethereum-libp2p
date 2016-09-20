@@ -4,9 +4,10 @@ import {routerMiddleware} from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 
 import rootReducer from '../reducers'
+import {api} from '../services'
 
 const finalCreateStore = applyMiddleware(
-  thunkMiddleware,
+  thunkMiddleware.withExtraArgument(api.createNode()),
   routerMiddleware(hashHistory)
 )(createStore)
 

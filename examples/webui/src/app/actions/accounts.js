@@ -37,7 +37,7 @@ export function after (node, coinbase) {
       if (err) {
         return console.error(err)
       }
-      dispatch(processed(new Account(coinbase, account)))
+      dispatch(processed(coinbase, new Account(account)))
     })
   }
 }

@@ -5,10 +5,11 @@ import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 
 import rootReducer from '../reducers'
+import {api} from '../services'
 
 const finalCreateStore = compose(
   applyMiddleware(
-    thunkMiddleware,
+    thunkMiddleware.withExtraArgument(api.createNode()),
     routerMiddleware(hashHistory),
     createLogger()
   ),

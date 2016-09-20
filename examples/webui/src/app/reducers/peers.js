@@ -1,4 +1,5 @@
-const multiaddr = require('multiaddr')
+import {peers as actions} from '../actions'
+import multiaddr from 'multiaddr'
 
 const defaultState = {
   list: [
@@ -8,5 +9,15 @@ const defaultState = {
 }
 
 export default function peers (state = defaultState, action) {
-  return state
+  const {type, peer} = action
+  switch (type) {
+    case actions.ADD_PEER:
+      console.log('add', peer)
+      return state
+    case actions.REMOVE_PEER:
+      console.log('remove', peer)
+      return state
+    default:
+      return state
+  }
 }

@@ -27,7 +27,11 @@ export default class Blocks extends Component {
       </div>
     )
 
-    this._feedValues = Object.keys(this.props.feed)
+    this._feedValues = Object.keys(this.props.feed).sort((a, b) => {
+      if (a < b) return 1
+      if (a > b) return -1
+      return 0
+    })
     if (this._feedValues && this._feedValues.length > 0) {
       feed = (
         <AutoSizer>

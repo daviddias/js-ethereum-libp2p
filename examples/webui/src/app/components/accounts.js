@@ -3,6 +3,7 @@ import {Col, Glyph, Spinner} from 'elemental'
 import {AutoSizer, List} from 'react-virtualized'
 
 import ProcessingStatus from './processing-status'
+import Hash from './hash'
 
 export default class Accounts extends Component {
   static propTypes = {
@@ -15,8 +16,9 @@ export default class Accounts extends Component {
 
     return (
       <div key={key} className='account'>
-        {hash}: {item.account.balance}Ether <br />
-        Status: <ProcessingStatus status={item.status} />
+        <em>ID</em> <Hash value={item.id} /> <br />
+        <em>Balance</em> {item.account.balance}Wei <br />
+        <em>Status</em> <ProcessingStatus status={item.status} />
       </div>
     )
   }
@@ -47,7 +49,7 @@ export default class Accounts extends Component {
       )
     }
     return (
-      <Col sm='1' md='1' lg='1' className='feed accounts'>
+      <Col sm='1' md='1/3' lg='1/3' className='feed accounts'>
         <h2><Glyph icon='credit-card' /> Accounts</h2>
         <div className='feed-wrapper'>
           {feed}
