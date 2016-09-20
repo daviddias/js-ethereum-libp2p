@@ -66,10 +66,12 @@ export function star () {
     dispatch(start('star'))
 
     return getNode.then((node) => {
-      pullBlockchain(dispatch, node)
-
-      return callSync(node, relayInfo())
-        .then(() => dispatch(stop('star')))
+      return Promise.all([
+        pullBlockchain(dispatch, node),
+        callSync(node, relayInfo())
+      ])
+      .then(([i, _]) => clearInterval(i))
+      .then(() => dispatch(stop('star')))
     })
   }
 }
@@ -125,16 +127,18 @@ function relayInfo () {
 }
 
 function pullBlockchain (dispatch, node) {
-  let running
-  setTimeout(() => {
-    setInterval(() => {
-      if (running) return
-      running = true
+  return new Promise((resolve, reject) => {
+    let running
+    setTimeout(() => {
+      resolve(setInterval(() => {
+        if (running) return
+        running = true
 
-      runBlockchain(node).then(() => {
-        running = false
-        updateHead(dispatch, node)
-      })
+        runBlockchain(node).then(() => {
+          running = false
+          updateHead(dispatch, node)
+        })
+      }, 2000))
     }, 2000)
-  }, 2000)
+  })
 }

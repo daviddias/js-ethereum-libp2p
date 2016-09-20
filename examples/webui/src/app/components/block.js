@@ -15,15 +15,16 @@ function formatDate (buf) {
 export default class Block extends Component {
   static propTypes = {
     block: PropTypes.object.isRequired,
-    status: PropTypes.string.isRequired
+    status: PropTypes.string.isRequired,
+    style: PropTypes.object
   };
 
   render () {
-    const {block, status} = this.props
+    const {block, status, style} = this.props
     return (
-      <Row className='block'>
+      <Row className='block' style={style}>
         <Col sm='1/3' className={`block-number ${status}`}>
-          Block {block.header.number}<br />
+          Block {bufferToInt(block.header.number)}<br />
         </Col>
 
         <Col sm='2/3' className='block-details'>

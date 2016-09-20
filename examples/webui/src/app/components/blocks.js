@@ -6,15 +6,14 @@ import Block from './block'
 
 export default class Blocks extends Component {
   static propTypes = {
-    feed: PropTypes.object.isRequired
+    feed: PropTypes.array.isRequired
   };
 
   _renderBlock = ({key, index, style}) => {
-    const hash = this._feedValues[index]
-    const item = this.props.feed[hash]
+    const item = this.props.feed[index]
 
     return (
-      <Block key={key} status={item.status} block={item.block} />
+      <Block key={key} style={style} status={item.status} block={item.block} />
     )
   }
 
@@ -27,19 +26,14 @@ export default class Blocks extends Component {
       </div>
     )
 
-    this._feedValues = Object.keys(this.props.feed).sort((a, b) => {
-      if (a < b) return 1
-      if (a > b) return -1
-      return 0
-    })
-    if (this._feedValues && this._feedValues.length > 0) {
+    if (this.props.feed && this.props.feed.length > 0) {
       feed = (
         <AutoSizer>
           {({ height, width }) => (
             <List
               width={width}
               height={height}
-              rowCount={this._feedValues.length}
+              rowCount={this.props.feed.length}
               rowHeight={70}
               rowRenderer={this._renderBlock}
             />

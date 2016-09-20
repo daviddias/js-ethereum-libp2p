@@ -11,9 +11,9 @@ import ActionButtons from './action-buttons'
 class Home extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    blocks: PropTypes.object.isRequired,
+    blocks: PropTypes.array.isRequired,
     peers: PropTypes.array.isRequired,
-    accounts: PropTypes.object.isRequired
+    accounts: PropTypes.array.isRequired
   };
 
   componentWillMount () {

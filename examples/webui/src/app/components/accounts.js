@@ -7,15 +7,14 @@ import Hash from './hash'
 
 export default class Accounts extends Component {
   static propTypes = {
-    feed: PropTypes.object.isRequired
+    feed: PropTypes.array.isRequired
   };
 
-  _renderAccount = ({key, index}) => {
-    const hash = this._feedValues[index]
-    const item = this.props.feed[hash]
+  _renderAccount = ({key, index, style}) => {
+    const item = this.props.feed[index]
 
     return (
-      <div key={key} className='account'>
+      <div key={key} className='account' style={style}>
         <em>ID</em> <Hash value={item.id} /> <br />
         <em>Balance</em> {item.account.balance}Wei <br />
         <em>Status</em> <ProcessingStatus status={item.status} />
@@ -32,16 +31,15 @@ export default class Accounts extends Component {
       </div>
     )
 
-    this._feedValues = Object.keys(this.props.feed)
-    if (this._feedValues && this._feedValues.length > 0) {
+    if (this.props.feed && this.props.feed.length > 0) {
       feed = (
         <AutoSizer>
           {({ height, width }) => (
             <List
               width={width}
               height={height}
-              rowCount={this._feedValues.length}
-              rowHeight={50}
+              rowCount={this.props.feed.length}
+              rowHeight={69}
               rowRenderer={this._renderAccount}
             />
            )}

@@ -12,8 +12,8 @@ const node = api.createNode()
 const finalCreateStore = compose(
   applyMiddleware(
     thunkMiddleware.withExtraArgument(node),
-    routerMiddleware(hashHistory),
-    createLogger()
+    routerMiddleware(hashHistory)// ,
+    // createLogger()
   ),
   window.devToolsExtension ? window.devToolsExtension() : (f) => f
 )(createStore)
