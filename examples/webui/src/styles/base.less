@@ -1,0 +1,34 @@
+html,
+body {
+  font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
+  color: #4d5659;
+}
+
+.page-wrapper {
+	.display-flex();
+	.flex-direction(column);
+	min-height: 100vh;
+}
+
+.page-body {
+  .display-flex();
+	.flex-grow(1);
+  .align-items(stretch);
+  padding: 100px 0;
+}
+
+.page-body-inner {
+  .display-flex();
+  .flex-direction(column);
+  .align-items(stretch);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.top-row {
+  height: 100%;
+}

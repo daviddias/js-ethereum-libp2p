@@ -1,23 +1,27 @@
-const ethereum = require('../../../../src')
+import React from 'react'
+import {render} from 'react-dom'
+import {hashHistory} from 'react-router'
+import {syncHistoryWithStore} from 'react-router-redux'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
-const node = new ethereum.Node()
+import routes from './routes'
+import Root from './containers/root'
+import configureStore from './store/configure-store'
+import 'react-virtualized/styles.css'
+import '../styles/app.less'
 
-node.start((err) => {
-  console.log('node has started and connected connected')
+const store = configureStore()
+const history = syncHistoryWithStore(hashHistory, store)
+
+injectTapEventPlugin()
+
+requestAnimationFrame(() => {
+  render(
+    <Root
+      store={store}
+      history={history}
+      routes={routes}
+    />,
+    document.getElementById('root')
+  )
 })
-
-function runSimulation () {
-  // TODO
-  //   Generate blocks
-  //   Process them
-  //   Visualize
-  //     blocks coming in
-  //     vm state (green or red)
-  //     state of the accounts
-}
-
-function connectToTheNetwork () {
-  // TODO
-    // dial to the relay node
-    // get all the blocks
-}
