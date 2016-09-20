@@ -7,6 +7,7 @@ import Transactions from '../components/transactions'
 import Peers from '../components/peers'
 import Accounts from '../components/accounts'
 import {home} from '../actions'
+import ActionButtons from './action-buttons'
 
 class Home extends Component {
   static propTypes = {
@@ -28,6 +29,7 @@ class Home extends Component {
   render () {
     return (
       <Row className='top-row'>
+        <ActionButtons />
         <Col sm='1' md='1/3' lg='1/3' className='feed'>
           <Accounts feed={this.props.accounts} />
           <Peers feed={this.props.peers} />

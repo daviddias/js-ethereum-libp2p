@@ -1,16 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {Col, Glyph, Spinner} from 'elemental'
 import {AutoSizer, List} from 'react-virtualized'
-import {bufferToInt} from 'ethereumjs-util'
 
-import ProcessingStatus from './processing-status'
-import Hash from './hash'
-
-function formatDate (buf) {
-  const ts = bufferToInt(buf)
-  const date = new Date(ts)
-  return date.toLocaleString()
-}
+import Block from './block'
 
 export default class Blocks extends Component {
   static propTypes = {
@@ -20,15 +12,9 @@ export default class Blocks extends Component {
   _renderBlock = ({key, index, style}) => {
     const hash = this._feedValues[index]
     const item = this.props.feed[hash]
-    const block = item.block
 
     return (
-      <div key={key} style={style} className='block'>
-        Number: {block.header.number}<br />
-        Parent: <Hash value={block.header.parentHash} /><br />
-        Time: {formatDate(block.header.timestamp)}<br />
-        Status: <ProcessingStatus status={item.status} />
-      </div>
+      <Block key={key} status={item.status} block={item.block} />
     )
   }
 

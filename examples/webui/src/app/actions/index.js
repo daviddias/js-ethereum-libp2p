@@ -14,6 +14,7 @@ import * as accounts from './accounts'
 import * as blocks from './blocks'
 import * as peers from './peers'
 import * as transactions from './transactions'
+import * as buttons from './buttons'
 
 export {errors}
 export {router}
@@ -22,3 +23,4 @@ export {accounts}
 export {blocks}
 export {peers}
 export {transactions}
+export {buttons}
